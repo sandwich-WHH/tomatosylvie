@@ -1,0 +1,31 @@
+name: HeartLeaf
+options:
+  bundleIdPrefix: com.heartleaf
+  deploymentTarget:
+    iOS: "16.0"
+  xcodeVersion: "15.0"
+settings:
+  base:
+    SWIFT_VERSION: "5.9"
+    DEVELOPMENT_TEAM: ""
+    CODE_SIGN_STYLE: Automatic
+    INFOPLIST_FILE: Resources/Info.plist
+targets:
+  HeartLeaf:
+    type: application
+    platform: iOS
+    sources:
+      - path: Sources
+      - path: Views
+      - path: ViewModels
+      - path: Services
+      - path: Models
+      - path: Resources
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.heartleaf.app
+        PRODUCT_NAME: 心叶
+        TARGETED_DEVICE_FAMILY: "1"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        CODE_SIGN_ENTITLEMENTS: Supporting/HeartLeaf.entitlements
+        GENERATE_INFOPLIST_FILE: NO

@@ -1,0 +1,952 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>心叶 App · 无框裸插画预览 v2.2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #FFFFFF;
+    --bg-soft: #FAFAF8;
+    --paper: #F6F5F3;
+    --ink: #3E3A37;
+    --ink-soft: #9B9792;
+    --line: #E8E6E2;
+    --brand: #7E9280;
+    --brand-dark: #5C7060;
+
+    --mood-happy:    #9BAE9A;
+    --mood-calm:     #8FA8B5;
+    --mood-tired:    #A69CAE;
+    --mood-sad:      #7E8EA5;
+    --mood-anxious:  #C2A08A;
+    --mood-angry:    #BF8F84;
+  }
+
+  body {
+    background: var(--bg-soft);
+    color: var(--ink);
+    font-family: 'Noto Sans SC', system-ui, sans-serif;
+    padding: 50px 24px;
+    min-height: 100vh;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 50px;
+  }
+
+  .header h1 {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 30px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+
+  .header .leaf { color: var(--brand); display: inline-block; transform: rotate(-15deg); }
+
+  .header .badge {
+    display: inline-block;
+    background: var(--brand);
+    color: #FFFFFF;
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 12px;
+    margin-left: 8px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+  }
+
+  .header .desc {
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-top: 12px;
+    line-height: 1.8;
+    max-width: 560px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* ========== Section 通用 ========== */
+  .section {
+    max-width: 1100px;
+    margin: 0 auto 50px;
+  }
+
+  .section-title {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 20px;
+    color: var(--ink);
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-title .em {
+    font-family: 'Caveat', cursive;
+    color: var(--brand);
+    font-size: 22px;
+  }
+
+  .section-sub {
+    font-size: 12px;
+    color: var(--ink-soft);
+    margin-bottom: 24px;
+    padding-left: 2px;
+  }
+
+  /* ========== 三阶段对比 ========== */
+  .evolution {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 50px;
+  }
+
+  .evo-card {
+    background: #FFFFFF;
+    border-radius: 24px;
+    padding: 24px 18px 20px;
+    border: 1px solid var(--line);
+    text-align: center;
+  }
+
+  .evo-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 500;
+    padding: 3px 8px;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    letter-spacing: 0.5px;
+  }
+
+  .evo-tag.v1 { background: #F0EDE8; color: #9B9792; }
+  .evo-tag.v2 { background: rgba(155,174,154,0.2); color: #6B7E6A; }
+  .evo-tag.v3 { background: var(--brand); color: #FFFFFF; }
+
+  .evo-title {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 16px;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+
+  .evo-sub {
+    font-size: 11px;
+    color: var(--ink-soft);
+    margin-bottom: 18px;
+  }
+
+  .evo-demo {
+    height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #FAFAF8;
+    border-radius: 16px;
+    padding: 12px;
+  }
+
+  /* v1 胶囊 */
+  .mini-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 8px;
+    background: #FFFFFF;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    font-family: 'Noto Serif SC', serif;
+    font-size: 11px;
+  }
+
+  .mini-chip .icon-circle {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: var(--mood-happy);
+  }
+
+  /* v2 心情卡 */
+  .mini-card {
+    width: 80px;
+    background: #F6F5F3;
+    border-radius: 14px;
+    padding: 10px 6px 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .mini-card .icon-bg {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: #FFFFFF;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .mini-card img {
+    width: 100%; height: 100%;
+    object-fit: contain;
+  }
+
+  .mini-card .label {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 11px;
+  }
+
+  /* v3 裸插画 */
+  .mini-naked {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .mini-naked img {
+    width: 70px; height: 70px;
+    object-fit: contain;
+  }
+
+  .mini-naked .label {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 12px;
+    color: var(--ink);
+  }
+
+  /* ========== 写记录页场景 ========== */
+  .phones-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .phone-frame {
+    background: #FFFFFF;
+    border-radius: 40px;
+    padding: 12px;
+    box-shadow:
+      0 0 0 1px var(--line),
+      0 20px 50px rgba(0,0,0,0.08);
+    max-width: 380px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .phone-screen {
+    background: #FFFFFF;
+    border-radius: 32px;
+    padding: 20px 18px 30px;
+    min-height: 640px;
+    position: relative;
+  }
+
+  .phone-statusbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 4px 6px 16px;
+  }
+
+  .phone-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 0 18px;
+  }
+
+  .phone-nav .cancel {
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+
+  .phone-nav .save {
+    font-size: 14px;
+    color: var(--brand);
+    font-weight: 500;
+  }
+
+  .phone-nav .save.disabled {
+    color: #C8C5C0;
+  }
+
+  .phone-date {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-bottom: 28px;
+  }
+
+  .phone-section-title {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 19px;
+    color: var(--ink);
+    margin-bottom: 4px;
+    font-weight: 500;
+  }
+
+  .phone-section-hint {
+    font-family: 'Caveat', cursive;
+    font-size: 15px;
+    color: var(--brand);
+    margin-bottom: 18px;
+    transform: rotate(-1deg);
+    display: inline-block;
+  }
+
+  .mood-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 22px 16px;
+    margin-bottom: 28px;
+  }
+
+  .mood-item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    padding: 8px 0;
+  }
+
+  .mood-art {
+    width: 90px;
+    height: 90px;
+    object-fit: contain;
+    transition: transform 280ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    filter: drop-shadow(0 1px 0 rgba(0,0,0,0.03));
+  }
+
+  .mood-item:hover .mood-art {
+    transform: translateY(-3px) scale(1.05);
+  }
+
+  .mood-item.selected .mood-art {
+    transform: scale(1.1);
+  }
+
+  .mood-label {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 16px;
+    color: var(--ink);
+    letter-spacing: 2px;
+    position: relative;
+  }
+
+  .mood-item.selected .mood-label {
+    color: #5C7060;
+    font-weight: 600;
+  }
+
+  /* 选中态:手绘圈 */
+  .mood-circle-svg {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 104px;
+    height: 104px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 300ms;
+  }
+
+  .mood-item.selected .mood-circle-svg {
+    opacity: 1;
+  }
+
+  .mood-circle-path {
+    stroke-dasharray: 330;
+    stroke-dashoffset: 330;
+  }
+
+  .mood-item.selected .mood-circle-path {
+    animation: drawCircle 700ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+
+  @keyframes drawCircle {
+    to { stroke-dashoffset: 0; }
+  }
+
+  .mood-check {
+    position: absolute;
+    top: 6px; right: 6px;
+    font-family: 'Caveat', cursive;
+    font-size: 24px;
+    color: var(--mood-color);
+    opacity: 0;
+    transform: scale(0) rotate(-30deg);
+    transition: all 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .mood-item.selected .mood-check {
+    opacity: 1;
+    transform: scale(1) rotate(-5deg);
+  }
+
+  .phone-tagline {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-bottom: 10px;
+  }
+
+  .phone-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 24px;
+  }
+
+  .phone-tag {
+    padding: 5px 12px;
+    background: transparent;
+    border: 1.5px solid var(--line);
+    border-radius: 14px;
+    font-family: 'Noto Serif SC', serif;
+    font-size: 11px;
+    color: var(--ink-soft);
+  }
+
+  .phone-tag.selected {
+    background: var(--brand);
+    color: #FFFFFF;
+    border-color: var(--brand);
+  }
+
+  .phone-input-area {
+    background: transparent;
+    border: 1.5px dashed #C5D0BC;
+    border-radius: 16px;
+    padding: 18px;
+    min-height: 100px;
+    font-family: 'Noto Serif SC', serif;
+    font-size: 14px;
+    color: var(--ink-soft);
+    font-style: italic;
+    line-height: 1.8;
+  }
+
+  .phone-input-area.active {
+    color: var(--ink);
+    font-style: normal;
+  }
+
+  .phone-photo-btn {
+    position: absolute;
+    bottom: 24px;
+    right: 20px;
+    width: 44px; height: 44px;
+    background: var(--paper);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    color: var(--ink-soft);
+  }
+
+  /* ========== 手账本风格展示 ========== */
+  .journal-section {
+    background: #FFFFFF;
+    border-radius: 28px;
+    padding: 40px 36px;
+    border: 1px solid var(--line);
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .journal-header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  .journal-title {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+
+  .journal-date {
+    font-family: 'Caveat', cursive;
+    font-size: 18px;
+    color: var(--brand);
+  }
+
+  .journal-list {
+    display: grid;
+    gap: 24px;
+  }
+
+  .journal-item {
+    display: grid;
+    grid-template-columns: 80px 1fr auto;
+    align-items: center;
+    gap: 20px;
+    padding: 16px 0;
+    border-bottom: 1px dashed var(--line);
+  }
+
+  .journal-item:last-child {
+    border-bottom: none;
+  }
+
+  .journal-art {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+  }
+
+  .journal-content .mood-text {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 17px;
+    color: var(--ink);
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+
+  .journal-content .entry {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.7;
+  }
+
+  .journal-time {
+    font-family: 'Caveat', cursive;
+    font-size: 18px;
+    color: var(--ink-soft);
+    text-align: right;
+  }
+
+  /* ========== 统计页 ========== */
+  .stats-section {
+    background: #FFFFFF;
+    border-radius: 28px;
+    padding: 32px 28px;
+    border: 1px solid var(--line);
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .stats-title {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 20px;
+    color: var(--ink);
+    margin-bottom: 4px;
+    font-weight: 600;
+  }
+
+  .stats-sub {
+    font-family: 'Caveat', cursive;
+    font-size: 16px;
+    color: var(--brand);
+    margin-bottom: 28px;
+  }
+
+  .stats-list {
+    display: grid;
+    gap: 14px;
+  }
+
+  .stats-row {
+    display: grid;
+    grid-template-columns: 64px 1fr 60px;
+    align-items: center;
+    gap: 18px;
+  }
+
+  .stats-row .art-wrap {
+    width: 64px; height: 64px;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .stats-row .art-wrap img {
+    width: 100%; height: 100%;
+    object-fit: contain;
+  }
+
+  .stats-row .info .name {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 15px;
+    color: var(--ink);
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+
+  .stats-row .info .bar-bg {
+    height: 5px;
+    background: var(--paper);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .stats-row .info .bar-fill {
+    height: 100%;
+    background: var(--mood-color);
+    border-radius: 3px;
+  }
+
+  .stats-row .count {
+    font-family: 'Caveat', cursive;
+    font-size: 22px;
+    color: var(--mood-color);
+    text-align: right;
+    font-weight: 600;
+  }
+
+  .stats-row .count small {
+    font-size: 12px;
+    color: var(--ink-soft);
+    font-family: 'Noto Sans SC', sans-serif;
+    margin-left: 2px;
+  }
+
+  /* ========== Footer ========== */
+  .footer {
+    text-align: center;
+    margin-top: 70px;
+    padding: 30px 0;
+  }
+
+  .footer .quote {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 15px;
+    color: var(--ink);
+    font-style: italic;
+    line-height: 1.9;
+    max-width: 500px;
+    margin: 0 auto 14px;
+  }
+
+  .footer .author {
+    font-family: 'Caveat', cursive;
+    font-size: 18px;
+    color: var(--brand);
+  }
+
+  @media (max-width: 768px) {
+    .evolution, .phones-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1><span class="leaf">&#9826;</span> 心叶 · 无框裸插画版 <span class="badge">v2.2 终极</span></h1>
+  <p class="desc">透明背景 PNG · 直排文字 · 像翻一本手账书,而不是在用一个 App</p>
+</div>
+
+<!-- 三阶段演进 -->
+<div class="section">
+  <div class="section-title">三阶段设计演进 <span class="em">Design Evolution</span></div>
+  <div class="section-sub">从商业 UI → 卡片化 → 手账书页</div>
+
+  <div class="evolution">
+
+    <div class="evo-card">
+      <span class="evo-tag v1">v1</span>
+      <div class="evo-title">胶囊形态</div>
+      <div class="evo-sub">18×18px 图标 · 1 行</div>
+      <div class="evo-demo">
+        <div class="mini-chip">
+          <span class="icon-circle"></span>开心
+        </div>
+      </div>
+    </div>
+
+    <div class="evo-card">
+      <span class="evo-tag v2">v2.1</span>
+      <div class="evo-title">心情卡(有框)</div>
+      <div class="evo-sub">80×80px · 圆形容器</div>
+      <div class="evo-demo">
+        <div class="mini-card">
+          <div class="icon-bg"><img src="mood-icons/01_开心_太阳小人_透明.png" alt=""></div>
+          <span class="label">开心</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="evo-card">
+      <span class="evo-tag v3">v2.2</span>
+      <div class="evo-title">裸插画(无框)</div>
+      <div class="evo-sub">96×96px · 零容器</div>
+      <div class="evo-demo">
+        <div class="mini-naked">
+          <img src="mood-icons/01_开心_太阳小人_透明.png" alt="">
+          <span class="label">开心</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- 写记录页应用 -->
+<div class="section">
+  <div class="section-title">写记录页应用 <span class="em">In-App Preview</span></div>
+  <div class="section-sub">iPhone 14 Pro · 真实页面节奏 · 2 列网格无任何框</div>
+
+  <div class="phones-row">
+
+    <!-- 未选 -->
+    <div class="phone-frame">
+      <div class="phone-screen">
+        <div class="phone-statusbar"><span>9:41</span><span>5G</span></div>
+        <div class="phone-nav">
+          <span class="cancel">取消</span>
+          <span class="save disabled">保存</span>
+        </div>
+        <div class="phone-date">2025年8月2日 周六</div>
+
+        <div class="phone-section-title">现在的心情</div>
+        <div class="phone-section-hint">how are you feeling?</div>
+
+        <div class="mood-grid">
+
+          <div class="mood-item">
+            <img class="mood-art" src="mood-icons/01_开心_太阳小人_透明.png" alt="开心">
+            <span class="mood-label">开心</span>
+          </div>
+
+          <div class="mood-item">
+            <img class="mood-art" src="mood-icons/02_平静_茶杯小人_透明.png" alt="平静">
+            <span class="mood-label">平静</span>
+          </div>
+
+          <div class="mood-item">
+            <img class="mood-art" src="mood-icons/05_疲惫_云朵小人_透明.png" alt="疲惫">
+            <span class="mood-label">疲惫</span>
+          </div>
+
+          <div class="mood-item">
+            <img class="mood-art" src="mood-icons/06_低落_雨伞小人_透明.png" alt="低落">
+            <span class="mood-label">低落</span>
+          </div>
+
+          <div class="mood-item">
+            <img class="mood-art" src="mood-icons/03_焦虑_乱线小人_透明.png" alt="焦虑">
+            <span class="mood-label">焦虑</span>
+          </div>
+
+          <div class="mood-item">
+            <img class="mood-art" src="mood-icons/04_愤怒_闪电小人_透明.png" alt="愤怒">
+            <span class="mood-label">愤怒</span>
+          </div>
+
+        </div>
+
+        <div class="phone-tagline">加上标签(可多选)</div>
+        <div class="phone-tags">
+          <div class="phone-tag">#工作</div>
+          <div class="phone-tag">#生活</div>
+          <div class="phone-tag">#灵感</div>
+        </div>
+
+        <div class="phone-input-area">今天想说点什么吗?<br><br>深呼吸,然后开始。</div>
+
+        <div class="phone-photo-btn">&#128247;</div>
+      </div>
+    </div>
+
+    <!-- 已选 平静 -->
+    <div class="phone-frame">
+      <div class="phone-screen">
+        <div class="phone-statusbar"><span>9:41</span><span>5G</span></div>
+        <div class="phone-nav">
+          <span class="cancel">取消</span>
+          <span class="save">保存</span>
+        </div>
+        <div class="phone-date">2025年8月2日 周六</div>
+
+        <div class="phone-section-title">现在的心情</div>
+        <div class="phone-section-hint">how are you feeling?</div>
+
+        <div class="mood-grid">
+
+          <div class="mood-item">
+            <img class="mood-art" src="mood-icons/01_开心_太阳小人_透明.png" alt="开心">
+            <span class="mood-label">开心</span>
+          </div>
+
+          <div class="mood-item selected" style="--mood-color: var(--mood-calm);">
+            <svg class="mood-circle-svg" viewBox="0 0 100 100">
+              <path class="mood-circle-path" d="M 50,8 Q 88,12 92,52 Q 90,92 48,90 Q 8,86 10,48 Q 14,10 50,8 Z" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            </svg>
+            <img class="mood-art" src="mood-icons/02_平静_茶杯小人_透明.png" alt="平静">
+            <span class="mood-check" style="--mood-color: var(--mood-calm);">&#10003;</span>
+            <span class="mood-label">平静</span>
+          </div>
+
+          <div class="mood-item">
+            <img class="mood-art" src="mood-icons/05_疲惫_云朵小人_透明.png" alt="疲惫">
+            <span class="mood-label">疲惫</span>
+          </div>
+
+          <div class="mood-item">
+            <img class="mood-art" src="mood-icons/06_低落_雨伞小人_透明.png" alt="低落">
+            <span class="mood-label">低落</span>
+          </div>
+
+          <div class="mood-item">
+            <img class="mood-art" src="mood-icons/03_焦虑_乱线小人_透明.png" alt="焦虑">
+            <span class="mood-label">焦虑</span>
+          </div>
+
+          <div class="mood-item">
+            <img class="mood-art" src="mood-icons/04_愤怒_闪电小人_透明.png" alt="愤怒">
+            <span class="mood-label">愤怒</span>
+          </div>
+
+        </div>
+
+        <div class="phone-tagline">加上标签(可多选)</div>
+        <div class="phone-tags">
+          <div class="phone-tag">#工作</div>
+          <div class="phone-tag selected">#生活</div>
+          <div class="phone-tag">#灵感</div>
+        </div>
+
+        <div class="phone-input-area active">雨夜,泡了杯热茶。<br>窗外的灯光晕晕的,<br>心里很安静。</div>
+
+        <div class="phone-photo-btn">&#128247;</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- 手账本风格回顾 -->
+<div class="section">
+  <div class="section-title">手账本风格回顾 <span class="em">Journal View</span></div>
+  <div class="section-sub">首页时间线 · 像翻一本手账书</div>
+
+  <div class="journal-section">
+    <div class="journal-header">
+      <div class="journal-title">2025年8月</div>
+      <div class="journal-date">August, gently recorded</div>
+    </div>
+
+    <div class="journal-list">
+
+      <div class="journal-item">
+        <img class="journal-art" src="mood-icons/02_平静_茶杯小人_透明.png" alt="">
+        <div class="journal-content">
+          <div class="mood-text">平静</div>
+          <div class="entry">雨夜,泡了杯热茶。窗外的灯光晕晕的,心里很安静。</div>
+        </div>
+        <div class="journal-time">23:47</div>
+      </div>
+
+      <div class="journal-item">
+        <img class="journal-art" src="mood-icons/01_开心_太阳小人_透明.png" alt="">
+        <div class="journal-content">
+          <div class="mood-text">开心</div>
+          <div class="entry">项目终于上线,心里松了一口气,晚上去吃了顿好的。</div>
+        </div>
+        <div class="journal-time">08:12</div>
+      </div>
+
+      <div class="journal-item">
+        <img class="journal-art" src="mood-icons/05_疲惫_云朵小人_透明.png" alt="">
+        <div class="journal-content">
+          <div class="mood-text">疲惫</div>
+          <div class="entry">连开了 4 个会,脑子转不动了。早点睡吧。</div>
+        </div>
+        <div class="journal-time">22:03</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- 统计页 -->
+<div class="section">
+  <div class="section-title">统计页应用 <span class="em">Stats View</span></div>
+  <div class="section-sub">心情分布 · 64×64px 裸插画 + 手写体数字</div>
+
+  <div class="stats-section">
+    <div class="stats-title">本月心情</div>
+    <div class="stats-sub">40 records in August</div>
+
+    <div class="stats-list">
+
+      <div class="stats-row" style="--mood-color: var(--mood-calm);">
+        <div class="art-wrap"><img src="mood-icons/02_平静_茶杯小人_透明.png" alt=""></div>
+        <div class="info">
+          <div class="name">平静</div>
+          <div class="bar-bg"><div class="bar-fill" style="width: 75%;"></div></div>
+        </div>
+        <div class="count">12<small>次</small></div>
+      </div>
+
+      <div class="stats-row" style="--mood-color: var(--mood-happy);">
+        <div class="art-wrap"><img src="mood-icons/01_开心_太阳小人_透明.png" alt=""></div>
+        <div class="info">
+          <div class="name">开心</div>
+          <div class="bar-bg"><div class="bar-fill" style="width: 60%;"></div></div>
+        </div>
+        <div class="count">9<small>次</small></div>
+      </div>
+
+      <div class="stats-row" style="--mood-color: var(--mood-tired);">
+        <div class="art-wrap"><img src="mood-icons/05_疲惫_云朵小人_透明.png" alt=""></div>
+        <div class="info">
+          <div class="name">疲惫</div>
+          <div class="bar-bg"><div class="bar-fill" style="width: 45%;"></div></div>
+        </div>
+        <div class="count">7<small>次</small></div>
+      </div>
+
+      <div class="stats-row" style="--mood-color: var(--mood-anxious);">
+        <div class="art-wrap"><img src="mood-icons/03_焦虑_乱线小人_透明.png" alt=""></div>
+        <div class="info">
+          <div class="name">焦虑</div>
+          <div class="bar-bg"><div class="bar-fill" style="width: 32%;"></div></div>
+        </div>
+        <div class="count">5<small>次</small></div>
+      </div>
+
+      <div class="stats-row" style="--mood-color: var(--mood-sad);">
+        <div class="art-wrap"><img src="mood-icons/06_低落_雨伞小人_透明.png" alt=""></div>
+        <div class="info">
+          <div class="name">低落</div>
+          <div class="bar-bg"><div class="bar-fill" style="width: 25%;"></div></div>
+        </div>
+        <div class="count">4<small>次</small></div>
+      </div>
+
+      <div class="stats-row" style="--mood-color: var(--mood-angry);">
+        <div class="art-wrap"><img src="mood-icons/04_愤怒_闪电小人_透明.png" alt=""></div>
+        <div class="info">
+          <div class="name">愤怒</div>
+          <div class="bar-bg"><div class="bar-fill" style="width: 18%;"></div></div>
+        </div>
+        <div class="count">3<small>次</small></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <p class="quote">"把每一份心情都画下来,<br>像翻开一本会呼吸的日记。"</p>
+  <p class="author">— Heart Leaf · 2026</p>
+</div>
+
+</body>
+</html>

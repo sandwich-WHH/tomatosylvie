@@ -1,0 +1,16 @@
+{
+  "name": "心叶 Heart Leaf",
+  "short_name": "心叶",
+  "description": "减压倾诉日记 · 会呼吸的树洞",
+  "lang": "zh-CN",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F6F5F3",
+  "theme_color": "#7E9280",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
