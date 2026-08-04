@@ -44,7 +44,7 @@
 ```
 heart leaf APP/
 ├── web/                   # 可交互 HTML 原型（PWA 预览）
-│   ├── index.html         # ★ v3.7 最终定稿
+│   ├── index.html         # 最终定稿
 │   ├── manifest.webmanifest
 │   ├── icons/             # PWA 图标
 │   └── mood-icons/        # 6 张心情裸插画 + logo_leaf.png
